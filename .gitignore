@@ -12,4 +12,8 @@
 *.out
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+vendor/
+layer/
+neo4j-lambda-connector/bin
+neo4j-lambda-connector/.serverless
+neo4j-lambda-connector/Gopkg.lock

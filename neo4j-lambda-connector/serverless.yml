@@ -1,0 +1,43 @@
+
+service: neo4j-lambda-connector #  update this with your service name
+
+frameworkVersion: ">=1.28.0 <2.0.0"
+
+# provide appropriate values
+provider:
+  name: aws
+  runtime: go1.x
+  stage: dev
+  region: us-east-1
+  environment:
+    NEO4J_URL: bolt://neo4j_ip:7687 
+    NEO4J_USERNAME: neo4j
+    NEO4J_PASSWORD: neo4j 
+
+layers:
+  seabolt:
+    path: ../layer
+    compatibleRuntimes:
+      - go1.x
+    allowedAccounts:
+      - '*'
+    package:
+      exclude:
+        - ./**
+      include:
+        - ../layer/**
+
+functions:
+  neo4jConnector: # update this with the name of your function
+    handler: bin/connect # change this to the name to your binary file
+    package:
+      exclude:
+        - ./**
+      include:
+        - ./bin/connect  # change this to the name of your binary file
+    layers:
+      - {Ref: SeaboltLambdaLayer}
+    events:
+      - httpApi:  # optional : define an API Gateway endpoint for calling the lambda function
+          method: POST
+          path: /neo4jConnector
